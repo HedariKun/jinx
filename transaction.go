@@ -19,7 +19,7 @@ func (jt *JinxTransaction) SetMap(key string, m map[string]string) error {
 	return jt.localDB.SetMap(key, m)
 }
 
-func (jt *JinxTransaction) Get(key string) JinxEntry {
+func (jt *JinxTransaction) Get(key string) interface{} {
 	element := jt.localDB.Get(key)
 	if element != nil {
 		return element

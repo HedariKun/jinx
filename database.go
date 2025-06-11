@@ -1,7 +1,6 @@
 package jinx
 
 import (
-	"encoding/json"
 	"sync"
 	"time"
 )
@@ -29,13 +28,7 @@ func (jd *JinxDatabase) Set(key string, value interface{}) error {
 	case []byte:
 		rValue = string(v)
 	default:
-		bytes, err := json.Marshal(value)
-		if err != nil {
-			// TODO: best handle this edge case
-			return err
-		}
-
-		rValue = string(bytes)
+		rValue = value
 	}
 
 	databaseEntry := databaseEntry{
@@ -59,13 +52,7 @@ func (jd *JinxDatabase) SetExpire(key string, value interface{}, expire int) err
 	case []byte:
 		rValue = string(v)
 	default:
-		bytes, err := json.Marshal(value)
-		if err != nil {
-			// TODO: best handle this edge case
-			return err
-		}
-
-		rValue = string(bytes)
+		rValue = value
 	}
 
 	databaseEntry := databaseEntry{
@@ -86,7 +73,7 @@ func (jd *JinxDatabase) SetMap(key string, m map[string]string) error {
 	return nil
 }
 
-func (jd *JinxDatabase) Get(key string) JinxEntry {
+func (jd *JinxDatabase) Get(key string) interface{} {
 	jd.mu.RLock()
 	defer jd.mu.RUnlock()
 
